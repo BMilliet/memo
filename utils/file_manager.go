@@ -27,7 +27,7 @@ func (m *FileManager) ensureMemoDir() error {
 		if err != nil {
 			return fmt.Errorf("error creating .memo directory: %v", err)
 		}
-		fmt.Println("Created .memo directory")
+		fmt.Println("Created .memo directory at ", m.MemoDir)
 	} else {
 		fmt.Println(".memo directory already exists")
 	}
@@ -41,9 +41,9 @@ func (m *FileManager) checkAndCreateFile(filename string) error {
 		if err != nil {
 			return fmt.Errorf("error creating %s: %v", filename, err)
 		}
-		fmt.Printf("Created %s file\n", filename)
+		fmt.Println("Created file: ", filePath)
 	} else {
-		fmt.Printf("%s already exists\n", filename)
+		fmt.Println("already exists ", filePath)
 	}
 	return nil
 }
