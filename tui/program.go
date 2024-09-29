@@ -17,7 +17,7 @@ type program struct {
 
 func NewProgram() *program {
 	return &program{
-		currentView: InitMenu(), // Start with the menu
+		currentView: initMenu(), // Start with the menu
 	}
 }
 

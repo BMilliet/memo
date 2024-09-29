@@ -92,7 +92,7 @@ func (m model) View() string {
 }
 
 // Initialize the menu with items
-func InitMenu() model {
+func initMenu() model {
 	items := []list.Item{
 		item("list TODOs"),
 		item("add TODO"),
