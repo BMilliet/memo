@@ -73,9 +73,9 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "enter":
 			i, ok := m.list.SelectedItem().(item)
 			if ok {
-				m.choice = string(i)
+				m.choice = string(i) // Set the choice to trigger view change
 			}
-			return m, tea.Quit
+			return m, nil
 		}
 	}
 
@@ -85,16 +85,13 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m model) View() string {
-	if m.choice != "" {
-		// change model
-		return quitTextStyle.Render(fmt.Sprintf("%s? Sounds good to me.", m.choice))
-	}
 	if m.quitting {
 		return quitTextStyle.Render("See ya 👋")
 	}
 	return "\n" + m.list.View()
 }
 
+// Initialize the menu with items
 func InitMenu() model {
 	items := []list.Item{
 		item("list TODOs"),

@@ -1,10 +1,8 @@
 package tui
 
 import (
-	// tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
-
 
 // var (
 // 	//Program    *tea.Program
