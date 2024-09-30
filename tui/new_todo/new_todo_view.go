@@ -1,9 +1,6 @@
 package new_todo
 
 import (
-	"fmt"
-	"os"
-
 	"github.com/charmbracelet/bubbles/list"
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
@@ -123,20 +120,13 @@ func (m AddTodoView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 // Add the new TODO and log it to file
 func (m *AddTodoView) next() {
 	m.todos = append(m.todos, m.question.answer)
-	f, err := tea.LogToFile("debug.log", "debug")
-	if err != nil {
-		fmt.Println("fatal:", err)
-		os.Exit(1)
-	} else {
-		// IMPLEMENT HERE
-		fmt.Fprintf(f, "todo: %s\n", m.todos[len(m.todos)-1])
-	}
-	defer f.Close()
 }
 
 // Render the view based on the current state
 func (m AddTodoView) View() string {
 	if m.quitting {
+		// Save all todos before quitting
+		saveTodos(m.todos)
 		return quitTextStyle.Render("See ya 👋")
 	}
 
