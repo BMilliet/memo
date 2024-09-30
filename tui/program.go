@@ -1,7 +1,10 @@
 package tui
 
 import (
+	getValue "memo/tui/get_value"
+	listTodo "memo/tui/list_todos"
 	addTodo "memo/tui/new_todo"
+	saveValue "memo/tui/save_value"
 
 	tea "github.com/charmbracelet/bubbletea"
 )
@@ -27,10 +30,10 @@ func (p *program) SwitchView(choice string) {
 	case "add TODO":
 		p.currentView = addTodo.NewAddTodoView()
 	case "list TODOs":
-		p.currentView = newListTodoView()
+		p.currentView = listTodo.NewListTodoView()
 	case "save value":
-		p.currentView = newSaveValueView()
+		p.currentView = saveValue.NewSaveValueView()
 	case "get value":
-		p.currentView = newGetValueView()
+		p.currentView = getValue.NewGetValueView()
 	}
 }

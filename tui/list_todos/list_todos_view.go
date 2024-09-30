@@ -1,19 +1,19 @@
-package tui
+package list_todos
 
 import tea "github.com/charmbracelet/bubbletea"
 
 // View for listing TODOs
-type listTodoView struct{}
+type ListTodoView struct{}
 
-func newListTodoView() ViewModel {
-	return listTodoView{}
+func NewListTodoView() ListTodoView {
+	return ListTodoView{}
 }
 
-func (l listTodoView) Init() tea.Cmd {
+func (l ListTodoView) Init() tea.Cmd {
 	return nil
 }
 
-func (l listTodoView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (l ListTodoView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		if msg.String() == "q" {
@@ -23,6 +23,6 @@ func (l listTodoView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return l, nil
 }
 
-func (l listTodoView) View() string {
+func (l ListTodoView) View() string {
 	return "List TODOs View\n\nPress 'q' to quit"
 }

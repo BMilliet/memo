@@ -1,19 +1,19 @@
-package tui
+package save_value
 
 import tea "github.com/charmbracelet/bubbletea"
 
 // View for saving a value
-type saveValueView struct{}
+type SaveValueView struct{}
 
-func newSaveValueView() ViewModel {
-	return saveValueView{}
+func NewSaveValueView() SaveValueView {
+	return SaveValueView{}
 }
 
-func (s saveValueView) Init() tea.Cmd {
+func (s SaveValueView) Init() tea.Cmd {
 	return nil
 }
 
-func (s saveValueView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (s SaveValueView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		if msg.String() == "q" {
@@ -23,6 +23,6 @@ func (s saveValueView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return s, nil
 }
 
-func (s saveValueView) View() string {
+func (s SaveValueView) View() string {
 	return "Save Value View\n\nPress 'q' to quit"
 }

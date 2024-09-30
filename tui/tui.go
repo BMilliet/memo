@@ -19,7 +19,7 @@ func (p *program) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	p.currentView, cmd = p.currentView.Update(msg)
 
 	// If the current view is the menu and a choice is made, switch views
-	if m, ok := p.currentView.(model); ok && m.choice != "" {
+	if m, ok := p.currentView.(MenuViewModel); ok && m.choice != "" {
 		p.SwitchView(m.choice)
 	}
 

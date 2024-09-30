@@ -48,17 +48,17 @@ func (d itemDelegate) Render(w io.Writer, m list.Model, index int, listItem list
 	fmt.Fprint(w, fn(str))
 }
 
-type model struct {
+type MenuViewModel struct {
 	list     list.Model
 	choice   string
 	quitting bool
 }
 
-func (m model) Init() tea.Cmd {
+func (m MenuViewModel) Init() tea.Cmd {
 	return nil
 }
 
-func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m MenuViewModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
 		m.list.SetWidth(msg.Width)
@@ -84,7 +84,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, cmd
 }
 
-func (m model) View() string {
+func (m MenuViewModel) View() string {
 	if m.quitting {
 		return quitTextStyle.Render("See ya 👋")
 	}
@@ -92,7 +92,7 @@ func (m model) View() string {
 }
 
 // Initialize the menu with items
-func initMenu() model {
+func initMenu() MenuViewModel {
 	items := []list.Item{
 		item("list TODOs"),
 		item("add TODO"),
@@ -110,5 +110,5 @@ func initMenu() model {
 	l.Styles.PaginationStyle = paginationStyle
 	l.Styles.HelpStyle = helpStyle
 
-	return model{list: l}
+	return MenuViewModel{list: l}
 }

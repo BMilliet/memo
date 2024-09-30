@@ -1,19 +1,19 @@
-package tui
+package get_value
 
 import tea "github.com/charmbracelet/bubbletea"
 
 // View for getting a value
-type getValueView struct{}
+type GetValueView struct{}
 
-func newGetValueView() ViewModel {
-	return getValueView{}
+func NewGetValueView() GetValueView {
+	return GetValueView{}
 }
 
-func (g getValueView) Init() tea.Cmd {
+func (g GetValueView) Init() tea.Cmd {
 	return nil
 }
 
-func (g getValueView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (g GetValueView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		if msg.String() == "q" {
@@ -23,6 +23,6 @@ func (g getValueView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return g, nil
 }
 
-func (g getValueView) View() string {
+func (g GetValueView) View() string {
 	return "Get Value View\n\nPress 'q' to quit"
 }
