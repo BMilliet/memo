@@ -12,8 +12,6 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
-const listHeight = 14
-
 var (
 	titleStyle        = lipgloss.NewStyle().MarginLeft(2)
 	itemStyle         = lipgloss.NewStyle().PaddingLeft(4)
@@ -85,10 +83,6 @@ func NewAddTodoView() *addTodoView {
 	confirmList := list.New(items, itemDelegate{}, defaultWidth, listHeight)
 	confirmList.Title = "Add another TODO?"
 
-	// Apply styles similar to menuView
-	// confirmList.Styles.Title = titleStyle
-	// confirmList.Styles.PaginationStyle = paginationStyle
-	// confirmList.Styles.HelpStyle = helpStyle
 	confirmList.SetShowStatusBar(false)
 	confirmList.SetFilteringEnabled(false)
 	confirmList.Styles.Title = titleStyle
@@ -118,7 +112,7 @@ func (m addTodoView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	case tea.KeyMsg:
 		switch msg.String() {
-		case "ctrl+c", "q":
+		case "ctrl+c":
 			return m, tea.Quit
 
 		case "enter":
