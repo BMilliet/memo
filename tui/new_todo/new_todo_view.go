@@ -1,6 +1,8 @@
 package new_todo
 
 import (
+	styles "memo/tui/styles"
+
 	"github.com/charmbracelet/bubbles/list"
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
@@ -23,7 +25,6 @@ type AddTodoView struct {
 	height      int
 	answerField textinput.Model
 	confirmList list.Model
-	styles      *Styles
 	todos       []string
 	quitting    bool
 }
@@ -34,7 +35,6 @@ type Question struct {
 }
 
 func NewAddTodoView() *AddTodoView {
-	styles := DefaultStyles()
 
 	answerField := textinput.New()
 	answerField.Placeholder = "Todo title"
@@ -55,16 +55,15 @@ func NewAddTodoView() *AddTodoView {
 
 	confirmList.SetShowStatusBar(false)
 	confirmList.SetFilteringEnabled(false)
-	confirmList.Styles.Title = titleStyle
-	confirmList.Styles.PaginationStyle = paginationStyle
-	confirmList.Styles.HelpStyle = helpStyle
+	confirmList.Styles.Title = styles.TitleStyle
+	confirmList.Styles.PaginationStyle = styles.PaginationStyle
+	confirmList.Styles.HelpStyle = styles.HelpStyle
 
 	return &AddTodoView{
 		state:       stateAddTodo,
 		question:    question,
 		answerField: answerField,
 		confirmList: confirmList,
-		styles:      styles,
 	}
 }
 
@@ -127,7 +126,7 @@ func (m AddTodoView) View() string {
 	if m.quitting {
 		// Save all todos before quitting
 		saveTodos(m.todos)
-		return quitTextStyle.Render("See ya 👋")
+		return styles.QuitTextStyle.Render("See ya 👋")
 	}
 
 	switch m.state {
@@ -142,7 +141,7 @@ func (m AddTodoView) View() string {
 			lipgloss.JoinVertical(
 				lipgloss.Center,
 				current.question,
-				m.styles.InputField.Render(
+				styles.InputField.Render(
 					m.answerField.View(),
 				),
 			),

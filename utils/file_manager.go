@@ -14,8 +14,7 @@ type FileManager struct {
 func NewFileManager() (*FileManager, error) {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
-		errorMsg := ErrorMsg("error getting home directory: %v", err)
-		return nil, fmt.Errorf(errorMsg, err)
+		return nil, fmt.Errorf("error getting home directory: %v", err)
 	}
 
 	memoDir := filepath.Join(homeDir, ".memo")
@@ -26,11 +25,10 @@ func (m *FileManager) ensureMemoDir() error {
 	if _, err := os.Stat(m.MemoDir); os.IsNotExist(err) {
 		err := os.Mkdir(m.MemoDir, 0755)
 		if err != nil {
-			errorMsg := ErrorMsg("error creating .memo directory: %v", err)
-			return fmt.Errorf(errorMsg, err)
+			return fmt.Errorf("error creating .memo directory: %v", err)
 		}
 
-		LogMsg("\nCreated .memo directory at -> %s", m.MemoDir)
+		LogMsg("\nCreated .memo directory at -> %v", m.MemoDir)
 	} else {
 		LogMsg(".memo directory already exists")
 	}
@@ -42,8 +40,7 @@ func (m *FileManager) checkAndCreateFile(filename string) error {
 	if _, err := os.Stat(filePath); os.IsNotExist(err) {
 		_, err := os.Create(filePath)
 		if err != nil {
-			errorMsg := ErrorMsg("error creating %s: %v", filename, err)
-			return fmt.Errorf(errorMsg, filename, err)
+			return fmt.Errorf("error creating %s: %v", filename, err)
 		}
 
 		LogMsg("Created file -> %s", filePath)

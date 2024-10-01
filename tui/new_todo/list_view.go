@@ -5,6 +5,8 @@ import (
 	"io"
 	"strings"
 
+	styles "memo/tui/styles"
+
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 )
@@ -26,10 +28,10 @@ func (d itemDelegate) Render(w io.Writer, m list.Model, index int, listItem list
 
 	str := fmt.Sprintf("%d. %s", index+1, i)
 
-	fn := itemStyle.Render
+	fn := styles.ItemStyle.Render
 	if index == m.Index() {
 		fn = func(s ...string) string {
-			return selectedItemStyle.Render("> " + strings.Join(s, " "))
+			return styles.SelectedItemStyle.Render("> " + strings.Join(s, " "))
 		}
 	}
 

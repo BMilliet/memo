@@ -2,25 +2,31 @@ package utils
 
 import (
 	"fmt"
-
-	"github.com/charmbracelet/lipgloss"
-)
-
-var (
-	logMsgStyle   = lipgloss.NewStyle().PaddingLeft(1).Foreground(lipgloss.Color("190")).Italic(true)
-	errorMsgStyle = lipgloss.NewStyle().PaddingLeft(1).Foreground(lipgloss.Color("170")).Bold(true)
+	"memo/tui/styles"
 )
 
 func LogMsg(format string, args ...interface{}) {
+	logMessage("log", format, args...)
+}
+
+func ErrorMsg(format string, args ...interface{}) {
+	logMessage("error", format, args...)
+}
+
+func logMessage(msgType string, format string, args ...interface{}) {
+	var styledMsg string
 	if len(args) > 0 {
 		format = fmt.Sprintf(format, args...)
 	}
-	styledLogMsg := logMsgStyle.Render(format)
-	fmt.Println(styledLogMsg)
-}
 
-func ErrorMsg(format string, args ...interface{}) string {
-	errorMsg := fmt.Sprintf(format, args...)
-	styledErrorMsg := errorMsgStyle.Render(errorMsg)
-	return styledErrorMsg
+	switch msgType {
+	case "log":
+		styledMsg = styles.LogMsgStyle.Render(format)
+	case "error":
+		styledMsg = styles.ErrorMsgStyle.Render(format)
+	default:
+		styledMsg = format
+	}
+
+	fmt.Println(styledMsg)
 }
