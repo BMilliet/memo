@@ -3,6 +3,7 @@ package new_todo
 import (
 	"encoding/json"
 	"fmt"
+	utils "memo/utils"
 	"os"
 	"path/filepath"
 )
@@ -12,7 +13,8 @@ func saveTodos(newTodos []string) error {
 	// Get user home directory
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
-		return fmt.Errorf("failed to get user home directory: %w", err)
+		errorMsg := utils.ErrorMsg("failed to get user home directory: %v", err)
+		return fmt.Errorf(errorMsg, err)
 	}
 
 	// Construct the file path
@@ -22,7 +24,8 @@ func saveTodos(newTodos []string) error {
 	// Read the existing todos from "todo.json" file
 	existingTodos, err := readExistingTodos(todoFilePath)
 	if err != nil {
-		return fmt.Errorf("failed to read existing todos: %w", err)
+		errorMsg := utils.ErrorMsg("failed to read existing todos: %v", err)
+		return fmt.Errorf(errorMsg, err)
 	}
 
 	// Merge existing todos with the new ones
@@ -31,7 +34,8 @@ func saveTodos(newTodos []string) error {
 	// Save the merged todos back to the "todo.json" file
 	err = writeTodosToFile(todoFilePath, mergedTodos)
 	if err != nil {
-		return fmt.Errorf("failed to write todos to file: %w", err)
+		errorMsg := utils.ErrorMsg("failed to write todos to file: %v", err)
+		return fmt.Errorf(errorMsg, err)
 	}
 
 	return nil
@@ -97,6 +101,8 @@ func writeTodosToFile(filePath string, todos []string) error {
 	if err != nil {
 		return fmt.Errorf("failed to write to file: %w", err)
 	}
+
+	utils.LogMsg("TODOs saved 💾")
 
 	return nil
 }

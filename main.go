@@ -3,22 +3,24 @@
 package main
 
 import (
-	//"fmt"
-	//"memo/utils"
+	"fmt"
 	"memo/tui"
+	"memo/utils"
 )
 
 func main() {
-	// fileManager, err := utils.NewFileManager()
-	// if err != nil {
-	// 	fmt.Printf("error creating file manager: %v", err)
-	// 	return
-	// }
+	fileManager, err := utils.NewFileManager()
+	if err != nil {
+		fmt.Printf("error creating file manager: %v", err)
+		return
+	}
 
-	// if err := fileManager.BasicSetup(); err != nil {
-	// 	fmt.Printf("error BasicSetup file manager: %v", err)
-	// 	return
-	// }
+	if err := fileManager.BasicSetup(); err != nil {
+		fmt.Printf("error BasicSetup file manager: %v", err)
+		return
+	}
 
 	tui.StartTea()
 }
+
+// implement the debug file to follow log
