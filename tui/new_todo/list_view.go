@@ -31,7 +31,7 @@ func (d itemDelegate) Render(w io.Writer, m list.Model, index int, listItem list
 	fn := styles.ItemStyle.Render
 	if index == m.Index() {
 		fn = func(s ...string) string {
-			return styles.SelectedItemStyle.Render("> " + strings.Join(s, " "))
+			return styles.SelectedItemStyle.Render("-> " + strings.Join(s, " "))
 		}
 	}
 

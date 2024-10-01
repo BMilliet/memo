@@ -5,21 +5,13 @@ import (
 	"io"
 	"strings"
 
+	"memo/tui/styles"
+
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/lipgloss"
 )
 
 const listHeight = 14
-
-var (
-	titleStyle        = lipgloss.NewStyle().MarginLeft(2)
-	itemStyle         = lipgloss.NewStyle().PaddingLeft(4)
-	selectedItemStyle = lipgloss.NewStyle().PaddingLeft(2).Foreground(lipgloss.Color("170"))
-	paginationStyle   = list.DefaultStyles().PaginationStyle.PaddingLeft(4)
-	helpStyle         = list.DefaultStyles().HelpStyle.PaddingLeft(4).PaddingBottom(1)
-	quitTextStyle     = lipgloss.NewStyle().Margin(1, 0, 2, 4)
-)
 
 type item string
 
@@ -38,10 +30,10 @@ func (d itemDelegate) Render(w io.Writer, m list.Model, index int, listItem list
 
 	str := fmt.Sprintf("%d. %s", index+1, i)
 
-	fn := itemStyle.Render
+	fn := styles.ItemStyle.Render
 	if index == m.Index() {
 		fn = func(s ...string) string {
-			return selectedItemStyle.Render("> " + strings.Join(s, " "))
+			return styles.SelectedItemStyle.Render("-> " + strings.Join(s, " "))
 		}
 	}
 
@@ -86,7 +78,7 @@ func (m MenuViewModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m MenuViewModel) View() string {
 	if m.quitting {
-		return quitTextStyle.Render("See ya 👋")
+		return styles.QuitTextStyle.Render("See ya 👋")
 	}
 	return "\n" + m.list.View()
 }
@@ -106,9 +98,9 @@ func initMenu() MenuViewModel {
 	l.Title = "Welcome to memo 💾"
 	l.SetShowStatusBar(false)
 	l.SetFilteringEnabled(false)
-	l.Styles.Title = titleStyle
-	l.Styles.PaginationStyle = paginationStyle
-	l.Styles.HelpStyle = helpStyle
+	l.Styles.Title = styles.TitleStyle
+	l.Styles.PaginationStyle = styles.PaginationStyle
+	l.Styles.HelpStyle = styles.HelpStyle
 
 	return MenuViewModel{list: l}
 }

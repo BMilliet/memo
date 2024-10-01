@@ -29,8 +29,6 @@ func (m *FileManager) ensureMemoDir() error {
 		}
 
 		LogMsg("\nCreated .memo directory at -> %v", m.MemoDir)
-	} else {
-		LogMsg(".memo directory already exists")
 	}
 	return nil
 }
@@ -44,8 +42,6 @@ func (m *FileManager) checkAndCreateFile(filename string) error {
 		}
 
 		LogMsg("Created file -> %s", filePath)
-	} else {
-		LogMsg("already exists -> %s", filePath)
 	}
 	return nil
 }

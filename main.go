@@ -22,5 +22,3 @@ func main() {
 
 	tui.StartTea()
 }
-
-// implement the debug file to follow log
