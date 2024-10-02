@@ -1,4 +1,4 @@
-package new_todo
+package todo_handler
 
 import (
 	"encoding/json"
@@ -9,7 +9,7 @@ import (
 )
 
 // SaveTodos saves the new todos into ".memo/todo.json" after merging with existing ones
-func saveTodos(newTodos []string) error {
+func SaveNewTodos(newTodos []string) error {
 	// Get user home directory
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
@@ -21,7 +21,7 @@ func saveTodos(newTodos []string) error {
 	todoFilePath := filepath.Join(memoDir, "todos.json")
 
 	// Read the existing todos from "todo.json" file
-	existingTodos, err := readExistingTodos(todoFilePath)
+	existingTodos, err := ReadExistingTodos(todoFilePath)
 	if err != nil {
 		return fmt.Errorf("failed to read existing todos: %v", err)
 	}
@@ -39,7 +39,7 @@ func saveTodos(newTodos []string) error {
 }
 
 // readExistingTodos reads the existing todos from the "todo.json" file
-func readExistingTodos(filePath string) ([]string, error) {
+func ReadExistingTodos(filePath string) ([]string, error) {
 	// Check if the file exists
 	if _, err := os.Stat(filePath); os.IsNotExist(err) {
 		// If file doesn't exist, return an empty slice (no todos exist yet)

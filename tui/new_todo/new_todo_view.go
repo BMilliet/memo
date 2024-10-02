@@ -2,6 +2,7 @@ package new_todo
 
 import (
 	styles "memo/tui/styles"
+	handler "memo/tui/todo_handler"
 
 	"github.com/charmbracelet/bubbles/list"
 	"github.com/charmbracelet/bubbles/textinput"
@@ -125,7 +126,7 @@ func (m *AddTodoView) next() {
 func (m AddTodoView) View() string {
 	if m.quitting {
 		// Save all todos before quitting
-		saveTodos(m.todos)
+		handler.SaveNewTodos(m.todos)
 		return styles.QuitTextStyle.Render("See ya 👋")
 	}
 
