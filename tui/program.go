@@ -2,7 +2,7 @@ package tui
 
 import (
 	getValue "memo/tui/get_value"
-	listTodo "memo/tui/list_todos"
+	listTodos "memo/tui/list_todos"
 	addTodo "memo/tui/new_todo"
 	saveValue "memo/tui/save_value"
 
@@ -30,7 +30,7 @@ func (p *program) SwitchView(choice string) {
 	case "add TODO":
 		p.currentView = addTodo.NewAddTodoView()
 	case "list TODOs":
-		p.currentView = listTodo.NewListTodoView()
+		p.currentView = listTodos.NewTodosListView()
 	case "save value":
 		p.currentView = saveValue.NewSaveValueView()
 	case "get value":
