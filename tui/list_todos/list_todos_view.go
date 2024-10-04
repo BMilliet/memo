@@ -2,7 +2,7 @@ package list_todos
 
 import (
 	"fmt"
-	"memo/tui/styles"
+	"memo/tui/interfaces"
 	handler "memo/tui/todo_handler"
 	utils "memo/utils"
 
@@ -10,22 +10,22 @@ import (
 )
 
 type TodosListView struct {
+	mainView interfaces.MainViewInterface
 	choices  []string       // items on the to-do list
 	cursor   int            // which to-do list item our cursor is pointing at
 	selected map[int]string // which to-do items are selected
-	quitting bool
 }
 
-func NewTodosListView() TodosListView {
+func NewTodosListView(main interfaces.MainViewInterface) TodosListView {
 	choices, err := handler.ReadExistingTodos()
 	if err != nil {
 		utils.LogMsg("Could not read existing todos")
 	}
 
 	return TodosListView{
+		mainView: main,
 		choices:  choices,
 		selected: make(map[int]string),
-		quitting: false,
 	}
 }
 
@@ -45,7 +45,9 @@ func (m TodosListView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		// These keys should exit the program.
 		case "ctrl+c", "q":
-			m.quitting = true
+			updatedTodos := genUpdatedList(m)
+			handler.SaveOverwriteTodos(updatedTodos)
+			m.mainView.Quit()
 			return m, tea.Quit
 
 		// The "up" and "k" keys move the cursor up
@@ -78,11 +80,6 @@ func (m TodosListView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m TodosListView) View() string {
-	if m.quitting {
-		updatedTodos := genUpdatedList(m)
-		handler.SaveOverwriteTodos(updatedTodos)
-		return styles.QuitTextStyle.Render("See ya 👋")
-	}
 	// The header
 	s := "What should we buy at the market?\n\n"
 

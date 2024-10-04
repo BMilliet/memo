@@ -1,26 +1,33 @@
 package save_value
 
-import tea "github.com/charmbracelet/bubbletea"
+import (
+	"memo/tui/interfaces"
+
+	tea "github.com/charmbracelet/bubbletea"
+)
 
 // View for saving a value
-type SaveValueView struct{}
+type SaveValueView struct {
+	mainView interfaces.MainViewInterface
+}
 
-func NewSaveValueView() SaveValueView {
-	return SaveValueView{}
+func NewSaveValueView(main interfaces.MainViewInterface) SaveValueView {
+	return SaveValueView{mainView: main}
 }
 
 func (s SaveValueView) Init() tea.Cmd {
 	return nil
 }
 
-func (s SaveValueView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m SaveValueView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		if msg.String() == "q" {
-			return s, tea.Quit
+			m.mainView.Quit()
+			return m, tea.Quit
 		}
 	}
-	return s, nil
+	return m, nil
 }
 
 func (s SaveValueView) View() string {

@@ -1,8 +1,8 @@
 package new_todo
 
 import (
+	"memo/tui/interfaces"
 	styles "memo/tui/styles"
-	handler "memo/tui/todo_handler"
 
 	"github.com/charmbracelet/bubbles/list"
 	"github.com/charmbracelet/bubbles/textinput"
@@ -20,6 +20,7 @@ const (
 
 // View for adding a TODO
 type AddTodoView struct {
+	mainView    interfaces.MainViewInterface
 	state       State
 	question    Question
 	width       int
@@ -27,7 +28,6 @@ type AddTodoView struct {
 	answerField textinput.Model
 	confirmList list.Model
 	todos       []string
-	quitting    bool
 }
 
 type Question struct {
@@ -35,7 +35,7 @@ type Question struct {
 	answer   string
 }
 
-func NewAddTodoView() *AddTodoView {
+func NewAddTodoView(main interfaces.MainViewInterface) *AddTodoView {
 
 	answerField := textinput.New()
 	answerField.Placeholder = "Todo title"
@@ -61,6 +61,7 @@ func NewAddTodoView() *AddTodoView {
 	confirmList.Styles.HelpStyle = styles.HelpStyle
 
 	return &AddTodoView{
+		mainView:    main,
 		state:       stateAddTodo,
 		question:    question,
 		answerField: answerField,
@@ -100,7 +101,7 @@ func (m AddTodoView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					m.state = stateAddTodo
 					m.question.question = "Todo title"
 				} else if ok && selected == "No" {
-					m.quitting = true
+					m.mainView.Quit()
 					return m, tea.Quit
 				}
 			}
@@ -124,12 +125,6 @@ func (m *AddTodoView) next() {
 
 // Render the view based on the current state
 func (m AddTodoView) View() string {
-	if m.quitting {
-		// Save all todos before quitting
-		handler.SaveNewTodos(m.todos)
-		return styles.QuitTextStyle.Render("See ya 👋")
-	}
-
 	switch m.state {
 	case stateAddTodo:
 		// Render the add TODO view
