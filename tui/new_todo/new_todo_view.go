@@ -3,6 +3,7 @@ package new_todo
 import (
 	"memo/tui/interfaces"
 	styles "memo/tui/styles"
+	handler "memo/tui/todo_handler"
 
 	"github.com/charmbracelet/bubbles/list"
 	"github.com/charmbracelet/bubbles/textinput"
@@ -101,6 +102,7 @@ func (m AddTodoView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					m.state = stateAddTodo
 					m.question.question = "Todo title"
 				} else if ok && selected == "No" {
+					handler.SaveNewTodos(m.todos)
 					m.mainView.Quit()
 					return m, tea.Quit
 				}
