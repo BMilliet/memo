@@ -51,7 +51,7 @@ func (m *FileManager) BasicSetup() error {
 		return err
 	}
 
-	files := []string{"todos.json", "saves.json"}
+	files := []string{"todos.json", "saved.json"}
 	for _, file := range files {
 		if err := m.checkAndCreateFile(file); err != nil {
 			return err

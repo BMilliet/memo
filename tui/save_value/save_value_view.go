@@ -3,6 +3,7 @@ package save_value
 import (
 	"memo/tui/interfaces"
 	"memo/tui/styles"
+	handler "memo/tui/values_handler"
 
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
@@ -55,6 +56,7 @@ func (m *SaveValueView) next() {
 		m.questionIndex++
 	} else {
 		// someting else
+		handler.WriteLabelValue(m.questions[0].answer, m.questions[1].answer)
 		m.mainView.Quit()
 	}
 }
