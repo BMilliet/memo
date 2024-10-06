@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"memo/tui/interfaces"
 	handle "memo/tui/values_handler"
+	"memo/utils"
 
 	tea "github.com/charmbracelet/bubbletea"
 )
@@ -11,22 +12,17 @@ import (
 // View for getting a value
 type GetValueView struct {
 	mainView interfaces.MainViewInterface
-	choices  []string // items on the to-do list
-	cursor   int      // which to-do list item our cursor is pointing at
+	choices  []handle.LabelValue // items on the to-do list
+	cursor   int                 // which to-do list item our cursor is pointing at
 	selected map[int]struct{}
 }
 
 func NewGetValueView(main interfaces.MainViewInterface) GetValueView {
 	saved, _ := handle.ReadLabelValues()
 
-	result := make([]string, len(saved))
-	for i, v := range saved {
-		result[i] = v.Label // Apply function f to each element
-	}
-
 	return GetValueView{
 		mainView: main,
-		choices:  result,
+		choices:  saved,
 		selected: make(map[int]struct{}),
 	}
 }
@@ -61,6 +57,8 @@ func (m GetValueView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if ok {
 				delete(m.selected, m.cursor)
 			} else {
+				selectedValue := m.choices[m.cursor].Value
+				utils.CopyToClipboard(selectedValue)
 				m.selected[m.cursor] = struct{}{}
 			}
 		}
@@ -84,11 +82,11 @@ func (m GetValueView) View() string {
 		// Is this choice selected?
 		checked := " " // not selected
 		if _, ok := m.selected[i]; ok {
-			checked = "✅" // selected!
+			checked = "✅"
 		}
 
 		// Render the row
-		s += fmt.Sprintf("%s %s %s\n", cursor, checked, choice)
+		s += fmt.Sprintf("%s %s %s\n", cursor, checked, choice.Label)
 	}
 
 	// The footer
