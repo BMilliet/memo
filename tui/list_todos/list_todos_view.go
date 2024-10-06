@@ -107,7 +107,7 @@ func (m TodosListView) View() string {
 		}
 	}
 
-	s += "\n\nPress q to quit.\n"
+	s += styles.FooterMsgStyle.Render("\n\nPress q to quit.\n")
 	return s
 }
 

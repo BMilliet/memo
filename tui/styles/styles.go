@@ -14,6 +14,7 @@ var (
 )
 
 var (
+	FooterMsgStyle   = lipgloss.NewStyle().PaddingLeft(1).Foreground(logColor).Italic(true)
 	LogMsgStyle   = lipgloss.NewStyle().PaddingLeft(1).Foreground(logColor).Italic(true)
 	ErrorMsgStyle = lipgloss.NewStyle().PaddingLeft(1).Foreground(errorColor).Bold(true)
 

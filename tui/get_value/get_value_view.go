@@ -89,7 +89,7 @@ func (m GetValueView) View() string {
 	}
 
 	// The footer
-	s += "\n\nPress q to quit.\n"
+	s += styles.FooterMsgStyle.Render("\n\nPress q to quit.\n")
 
 	// Send the UI for rendering
 	return s
