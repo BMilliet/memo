@@ -3,6 +3,7 @@ package list_todos
 import (
 	"fmt"
 	"memo/tui/interfaces"
+	"memo/tui/styles"
 	handler "memo/tui/todo_handler"
 	utils "memo/utils"
 
@@ -81,7 +82,7 @@ func (m TodosListView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m TodosListView) View() string {
 	// The header
-	s := "What should we buy at the market?\n\n"
+	s := styles.TitleStyle.Render("\nWhich todos have you completed?:\n")
 
 	// Iterate over our choices
 	for i, choice := range m.choices {
@@ -98,11 +99,15 @@ func (m TodosListView) View() string {
 			checked = "x" // selected!
 		}
 
-		// Render the row
-		s += fmt.Sprintf("%s [%s] %s\n", cursor, checked, choice)
+		// This logic should be improved
+		if cursor == ">" {
+			s += styles.SelectedItemStyle.Render(fmt.Sprintf("\n%s [%s] %s", cursor, checked, choice))
+		} else {
+			s += fmt.Sprintf("\n%s [%s] %s", cursor, checked, choice)
+		}
 	}
 
-	s += "\nPress q to quit.\n"
+	s += "\n\nPress q to quit.\n"
 	return s
 }
 

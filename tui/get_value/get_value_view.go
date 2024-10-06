@@ -3,6 +3,7 @@ package get_value
 import (
 	"fmt"
 	"memo/tui/interfaces"
+	styles "memo/tui/styles"
 	handle "memo/tui/values_handler"
 	"memo/utils"
 
@@ -63,28 +64,32 @@ func (m GetValueView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m GetValueView) View() string {
-	s := "What should we buy at the market?\n\n"
+	s := styles.TitleStyle.Render("\nSelect na item to be copied:\n")
 
 	// Iterate over our choices
 	for i, choice := range m.choices {
 
-		cursor := " " // no cursor
+		cursor := "" // no cursor
 		if m.cursor == i {
 			cursor = ">" // cursor!
 		}
 
-		checked := " " // not selected
+		checked := "" // not selected
 
 		if m.selected == i {
 			checked = "✅"
 		}
 
-		// Render the row
-		s += fmt.Sprintf("%s %s %s\n", cursor, checked, choice.Label)
+		// This logic should be improved
+		if cursor == ">" {
+			s += styles.SelectedItemStyle.Render(fmt.Sprintf("\n%s %s %s", cursor, checked, choice.Label))
+		} else {
+			s += fmt.Sprintf("\n%s %s %s", cursor, checked, choice.Label)
+		}
 	}
 
 	// The footer
-	s += "\nPress q to quit.\n"
+	s += "\n\nPress q to quit.\n"
 
 	// Send the UI for rendering
 	return s
