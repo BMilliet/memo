@@ -42,24 +42,14 @@ func NewAddTodoView(main interfaces.MainViewInterface) *AddTodoView {
 	answerField.Placeholder = "Todo title"
 	answerField.Focus()
 
-	const defaultWidth = 20
-	const listHeight = 14
-
 	question := Question{question: "Todo title"}
 
 	// Initialize the confirmation list with "Yes" and "No"
 	items := []list.Item{
-		item("Yes"),
-		item("No"),
+		styles.Item("Yes"),
+		styles.Item("No"),
 	}
-	confirmList := list.New(items, itemDelegate{}, defaultWidth, listHeight)
-	confirmList.Title = "Add another TODO?"
-
-	confirmList.SetShowStatusBar(false)
-	confirmList.SetFilteringEnabled(false)
-	confirmList.Styles.Title = styles.TitleStyle
-	confirmList.Styles.PaginationStyle = styles.PaginationStyle
-	confirmList.Styles.HelpStyle = styles.HelpStyle
+	confirmList := styles.ApplyStyle(items, "Add another TODO?")
 
 	return &AddTodoView{
 		mainView:    main,
@@ -85,6 +75,7 @@ func (m AddTodoView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "ctrl+c":
+			m.mainView.Quit()
 			return m, tea.Quit
 
 		case "enter":
@@ -96,7 +87,7 @@ func (m AddTodoView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.state = stateConfirm // Switch to confirmation view
 			} else if m.state == stateConfirm {
 				// Check the user's selection
-				selected, ok := m.confirmList.SelectedItem().(item)
+				selected, ok := m.confirmList.SelectedItem().(styles.Item)
 				if ok && selected == "Yes" {
 					// User selected "Yes", return to add TODO
 					m.state = stateAddTodo
