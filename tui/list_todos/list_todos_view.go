@@ -6,6 +6,8 @@ import (
 	"memo/tui/styles"
 	handler "memo/tui/todo_handler"
 	utils "memo/utils"
+	"sort"
+	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
 )
@@ -35,6 +37,25 @@ func (m TodosListView) Init() tea.Cmd {
 	return nil
 }
 
+func (m TodosListView) QuitAction() {
+	updatedTodos := genUpdatedList(m)
+	handler.SaveOverwriteTodos(updatedTodos)
+	m.mainView.Quit(m.QuittingMsg())
+}
+
+func (m TodosListView) QuittingMsg() string {
+	var values []string
+	for _, v := range m.selected {
+		newValue := styles.FooterMsgStyle.Render("🎉 Done! -> " + v)
+		values = append(values, newValue)
+	}
+
+	result := "\n\n"
+	result += strings.Join(values, "\n")
+
+	return result
+}
+
 func (m TodosListView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 
@@ -46,9 +67,7 @@ func (m TodosListView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		// These keys should exit the program.
 		case "ctrl+c", "q":
-			updatedTodos := genUpdatedList(m)
-			handler.SaveOverwriteTodos(updatedTodos)
-			m.mainView.Quit()
+			m.QuitAction()
 			return m, tea.Quit
 
 		// The "up" and "k" keys move the cursor up
@@ -113,6 +132,7 @@ func (m TodosListView) View() string {
 
 func genUpdatedList(m TodosListView) []string {
 	updatedList := removeSelected(m.choices, m.selected)
+	sort.Strings(updatedList)
 	return updatedList
 }
 

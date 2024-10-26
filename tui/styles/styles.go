@@ -14,9 +14,9 @@ var (
 )
 
 var (
-	FooterMsgStyle   = lipgloss.NewStyle().PaddingLeft(1).Foreground(logColor).Italic(true)
-	LogMsgStyle   = lipgloss.NewStyle().PaddingLeft(1).Foreground(logColor).Italic(true)
-	ErrorMsgStyle = lipgloss.NewStyle().PaddingLeft(1).Foreground(errorColor).Bold(true)
+	FooterMsgStyle = lipgloss.NewStyle().PaddingLeft(0).Foreground(logColor).Italic(true)
+	LogMsgStyle    = lipgloss.NewStyle().PaddingLeft(1).Foreground(logColor).Italic(true)
+	ErrorMsgStyle  = lipgloss.NewStyle().PaddingLeft(1).Foreground(errorColor).Bold(true)
 
 	FocusedStyle          = lipgloss.NewStyle().Foreground(thirdColor).Bold(true)
 	TitleStyle            = lipgloss.NewStyle().Foreground(thirdColor).Bold(true).Padding(0, 1, 0)

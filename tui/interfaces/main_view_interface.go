@@ -1,5 +1,5 @@
 package interfaces
 
 type MainViewInterface interface {
-	Quit()
+	Quit(messages ...string)
 }

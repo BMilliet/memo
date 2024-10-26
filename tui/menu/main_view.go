@@ -16,11 +16,13 @@ type ViewModel interface {
 type MainView struct {
 	currentView ViewModel
 	quitting    bool
+	customMsg   []string
 }
 
 var _ interfaces.MainViewInterface = (*MainView)(nil)
 
-func (p *MainView) Quit() {
+func (p *MainView) Quit(messages ...string) {
+	p.customMsg = messages
 	p.quitting = true
 }
 
@@ -57,7 +59,13 @@ func (p *MainView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 // Render the current view
 func (p *MainView) View() string {
 	if p.quitting {
-		return styles.QuitTextStyle.Render("See ya 👋 💾")
+		message := "See ya 👋 💾"
+
+		if len(p.customMsg) > 0 {
+			message += " " + p.customMsg[0]
+		}
+
+		return styles.QuitTextStyle.Render(message)
 	}
 	return p.currentView.View()
 }
