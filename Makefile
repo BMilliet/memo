@@ -11,7 +11,7 @@ build:
 test:
 	@go test -v
 
-queries_gen:
+querie:
 	@sqlc generate
 
 migrate:
