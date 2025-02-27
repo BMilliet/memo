@@ -1,24 +1,35 @@
-//tea "github.com/charmbracelet/bubbletea"
-
 package main
 
 import (
 	"fmt"
-	"memo/tui"
-	"memo/utils"
+	"log"
+	"os"
+
+	"memo/src"
 )
 
 func main() {
-	fileManager, err := utils.NewFileManager()
+	if len(os.Args) > 1 {
+		switch os.Args[1] {
+		case "--version", "-v":
+			fmt.Println(src.MemoVersion)
+			return
+		}
+	}
+
+	fileManager, err := src.NewFileManager()
 	if err != nil {
-		fmt.Printf("error creating file manager: %v", err)
-		return
+		log.Fatalln(err, "Failed to initialize FileManager")
 	}
 
-	if err := fileManager.BasicSetup(); err != nil {
-		fmt.Printf("error BasicSetup file manager: %v", err)
-		return
-	}
+	utils := src.NewUtils()
+	viewBuilder := src.NewViewBuilder()
 
-	tui.StartTea()
+	runner := src.NewRunner(
+		fileManager,
+		utils,
+		viewBuilder,
+	)
+
+	runner.Start()
 }
