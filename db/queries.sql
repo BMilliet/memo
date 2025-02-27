@@ -54,3 +54,4 @@ UPDATE snippets SET title = ?, content = ? WHERE id = ?;
 
 -- name: DeleteSnippet :exec
 DELETE FROM snippets WHERE id = ?;
+
