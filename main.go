@@ -59,8 +59,6 @@ func setupDB(path string) {
 	if err := runMigrations(db); err != nil {
 		log.Fatal("Migration failed:", err)
 	}
-
-	fmt.Println("✅ Database migrations applied successfully!")
 }
 
 func runMigrations(db *sql.DB) error {
