@@ -35,11 +35,15 @@ func main() {
 		log.Fatalln(setupErr, "Failed to setup basic memo dotfiles")
 	}
 
-	setupDB(fileManager.MemoDB)
+	dbPath := fileManager.DBPath
+
+	setupDB(dbPath)
 
 	utils := src.NewUtils()
 	viewBuilder := src.NewViewBuilder()
-	db := src.NewDbManager()
+	db := src.NewDbManager(utils, dbPath)
+
+	db.Setup()
 
 	runner := src.NewRunner(
 		fileManager,

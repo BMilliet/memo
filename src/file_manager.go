@@ -11,9 +11,9 @@ type FileManagerInterface interface {
 }
 
 type FileManager struct {
-	HomeDir string
-	MemoDir string
-	MemoDB  string
+	homeDir string
+	memoDir string
+	DBPath  string
 }
 
 func NewFileManager() (*FileManager, error) {
@@ -26,15 +26,15 @@ func NewFileManager() (*FileManager, error) {
 	memoDB := filepath.Join(memoDir, MemoDB)
 
 	return &FileManager{
-		HomeDir: homeDir,
-		MemoDir: memoDir,
-		MemoDB:  memoDB,
+		homeDir: homeDir,
+		memoDir: memoDir,
+		DBPath:  memoDB,
 	}, nil
 }
 
 func (m *FileManager) ensureMemoDir() error {
-	if _, err := os.Stat(m.MemoDir); os.IsNotExist(err) {
-		err := os.Mkdir(m.MemoDir, 0o755)
+	if _, err := os.Stat(m.memoDir); os.IsNotExist(err) {
+		err := os.Mkdir(m.memoDir, 0o755)
 		if err != nil {
 			return fmt.Errorf("ensureMemoDir -> %v", err)
 		}

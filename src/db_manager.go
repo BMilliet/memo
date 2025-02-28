@@ -37,16 +37,23 @@ type DBManager struct {
 	ctx     context.Context
 	queries *Queries
 	utils   UtilsInterface
+	dbPath  string
 }
 
-func NewDbManager() *DBManager {
-	return &DBManager{}
+func NewDbManager(utils UtilsInterface, dbPath string) *DBManager {
+	return &DBManager{
+		utils:  utils,
+		dbPath: dbPath,
+	}
 }
 
 func (dbm *DBManager) Setup() {
 	fmt.Println("🔌 Connecting to db...")
-	db, err := sql.Open("sqlite3", "database.db")
-	dbm.utils.HandleError(err, "failed to open database")
+
+	db, err := sql.Open("sqlite3", dbm.dbPath)
+	if err != nil {
+		dbm.utils.HandleError(err, "failed to open database")
+	}
 
 	dbm.db = db
 	dbm.queries = New(db)
