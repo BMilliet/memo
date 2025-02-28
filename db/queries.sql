@@ -1,6 +1,6 @@
 -- name: CreateTodo :one
-INSERT INTO todos (id, title, completed) 
-VALUES (?, ?, ?)
+INSERT INTO todos (id, title) 
+VALUES (?, ?)
 RETURNING *;
 
 -- name: GetTodo :one
@@ -13,7 +13,7 @@ SELECT * FROM todos ORDER BY created_at DESC;
 SELECT * FROM todos;
 
 -- name: UpdateTodo :exec
-UPDATE todos SET title = ?, completed = ? WHERE id = ?;
+UPDATE todos SET title = ? WHERE id = ?;
 
 -- name: DeleteTodo :exec
 DELETE FROM todos WHERE id = ?;

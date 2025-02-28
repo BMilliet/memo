@@ -65,9 +65,8 @@ func (dbm *DBManager) Setup() {
 func (dbm *DBManager) CreateTodo(todo *Todo) Todo {
 	ctx := context.Background()
 	obj, err := dbm.queries.CreateTodo(ctx, CreateTodoParams{
-		ID:        todo.ID,
-		Title:     todo.Title,
-		Completed: todo.Completed,
+		ID:    todo.ID,
+		Title: todo.Title,
 	})
 	dbm.utils.HandleError(err, "CreateTodo")
 	return obj
@@ -79,9 +78,8 @@ func (dbm *DBManager) GetTodo(id string) *Todo {
 	dbm.utils.HandleError(err, "GetTodo")
 
 	return &Todo{
-		ID:        todo.ID,
-		Title:     todo.Title,
-		Completed: todo.Completed,
+		ID:    todo.ID,
+		Title: todo.Title,
 	}
 }
 
@@ -93,9 +91,8 @@ func (dbm *DBManager) FindAllTodos() []*Todo {
 	var todos []*Todo
 	for _, result := range results {
 		todos = append(todos, &Todo{
-			ID:        result.ID,
-			Title:     result.Title,
-			Completed: result.Completed,
+			ID:    result.ID,
+			Title: result.Title,
 		})
 	}
 	return todos
@@ -104,9 +101,8 @@ func (dbm *DBManager) FindAllTodos() []*Todo {
 func (dbm *DBManager) UpdateTodo(todo *Todo) {
 	ctx := context.Background()
 	err := dbm.queries.UpdateTodo(ctx, UpdateTodoParams{
-		Title:     todo.Title,
-		Completed: todo.Completed,
-		ID:        todo.ID,
+		Title: todo.Title,
+		ID:    todo.ID,
 	})
 	dbm.utils.HandleError(err, "UpdateTodo")
 }

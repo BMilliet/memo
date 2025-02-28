@@ -25,6 +25,5 @@ type SnippetsList struct {
 type Todo struct {
 	ID        string
 	Title     string
-	Completed sql.NullBool
 	CreatedAt sql.NullTime
 }

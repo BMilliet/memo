@@ -7,7 +7,6 @@ package src
 
 import (
 	"context"
-	"database/sql"
 )
 
 const createSnippet = `-- name: CreateSnippet :one
@@ -60,26 +59,20 @@ func (q *Queries) CreateSnippetsList(ctx context.Context, arg CreateSnippetsList
 }
 
 const createTodo = `-- name: CreateTodo :one
-INSERT INTO todos (id, title, completed) 
-VALUES (?, ?, ?)
-RETURNING id, title, completed, created_at
+INSERT INTO todos (id, title) 
+VALUES (?, ?)
+RETURNING id, title, created_at
 `
 
 type CreateTodoParams struct {
-	ID        string
-	Title     string
-	Completed sql.NullBool
+	ID    string
+	Title string
 }
 
 func (q *Queries) CreateTodo(ctx context.Context, arg CreateTodoParams) (Todo, error) {
-	row := q.db.QueryRowContext(ctx, createTodo, arg.ID, arg.Title, arg.Completed)
+	row := q.db.QueryRowContext(ctx, createTodo, arg.ID, arg.Title)
 	var i Todo
-	err := row.Scan(
-		&i.ID,
-		&i.Title,
-		&i.Completed,
-		&i.CreatedAt,
-	)
+	err := row.Scan(&i.ID, &i.Title, &i.CreatedAt)
 	return i, err
 }
 
@@ -139,18 +132,13 @@ func (q *Queries) GetSnippetsList(ctx context.Context, id string) (SnippetsList,
 }
 
 const getTodo = `-- name: GetTodo :one
-SELECT id, title, completed, created_at FROM todos WHERE id = ?
+SELECT id, title, created_at FROM todos WHERE id = ?
 `
 
 func (q *Queries) GetTodo(ctx context.Context, id string) (Todo, error) {
 	row := q.db.QueryRowContext(ctx, getTodo, id)
 	var i Todo
-	err := row.Scan(
-		&i.ID,
-		&i.Title,
-		&i.Completed,
-		&i.CreatedAt,
-	)
+	err := row.Scan(&i.ID, &i.Title, &i.CreatedAt)
 	return i, err
 }
 
@@ -215,7 +203,7 @@ func (q *Queries) ListSnippetsLists(ctx context.Context) ([]SnippetsList, error)
 }
 
 const listTodos = `-- name: ListTodos :many
-SELECT id, title, completed, created_at FROM todos ORDER BY created_at DESC
+SELECT id, title, created_at FROM todos ORDER BY created_at DESC
 `
 
 func (q *Queries) ListTodos(ctx context.Context) ([]Todo, error) {
@@ -227,12 +215,7 @@ func (q *Queries) ListTodos(ctx context.Context) ([]Todo, error) {
 	var items []Todo
 	for rows.Next() {
 		var i Todo
-		if err := rows.Scan(
-			&i.ID,
-			&i.Title,
-			&i.Completed,
-			&i.CreatedAt,
-		); err != nil {
+		if err := rows.Scan(&i.ID, &i.Title, &i.CreatedAt); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -307,7 +290,7 @@ func (q *Queries) SelectAllSnippetsLists(ctx context.Context) ([]SnippetsList, e
 }
 
 const selectAllTodos = `-- name: SelectAllTodos :many
-SELECT id, title, completed, created_at FROM todos
+SELECT id, title, created_at FROM todos
 `
 
 func (q *Queries) SelectAllTodos(ctx context.Context) ([]Todo, error) {
@@ -319,12 +302,7 @@ func (q *Queries) SelectAllTodos(ctx context.Context) ([]Todo, error) {
 	var items []Todo
 	for rows.Next() {
 		var i Todo
-		if err := rows.Scan(
-			&i.ID,
-			&i.Title,
-			&i.Completed,
-			&i.CreatedAt,
-		); err != nil {
+		if err := rows.Scan(&i.ID, &i.Title, &i.CreatedAt); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -354,16 +332,15 @@ func (q *Queries) UpdateSnippet(ctx context.Context, arg UpdateSnippetParams) er
 }
 
 const updateTodo = `-- name: UpdateTodo :exec
-UPDATE todos SET title = ?, completed = ? WHERE id = ?
+UPDATE todos SET title = ? WHERE id = ?
 `
 
 type UpdateTodoParams struct {
-	Title     string
-	Completed sql.NullBool
-	ID        string
+	Title string
+	ID    string
 }
 
 func (q *Queries) UpdateTodo(ctx context.Context, arg UpdateTodoParams) error {
-	_, err := q.db.ExecContext(ctx, updateTodo, arg.Title, arg.Completed, arg.ID)
+	_, err := q.db.ExecContext(ctx, updateTodo, arg.Title, arg.ID)
 	return err
 }

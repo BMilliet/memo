@@ -52,8 +52,27 @@ func (r *Runner) Start() {
 }
 
 func (r *Runner) todoListSection() {
+	t1 := Todo{
+		ID:    "123",
+		Title: "walk the dog",
+	}
+
+	t2 := Todo{
+		ID:    "1111",
+		Title: "code",
+	}
+
+	t3 := Todo{
+		ID:    "99999",
+		Title: "what ever",
+	}
+	r.db.CreateTodo(&t1)
+	r.db.CreateTodo(&t2)
+	r.db.CreateTodo(&t3)
+
 	todos := r.db.FindAllTodos()
-	fmt.Println(todos)
+	toRemove := r.viewBuilder.NewTodoListView(todos, 16)
+	fmt.Println(toRemove)
 }
 
 func (r *Runner) snippetsListSection() {
