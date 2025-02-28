@@ -1,6 +1,8 @@
 package src
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type Runner struct {
 	fileManager FileManagerInterface
@@ -52,23 +54,23 @@ func (r *Runner) Start() {
 }
 
 func (r *Runner) todoListSection() {
-	t1 := Todo{
-		ID:    "123",
-		Title: "walk the dog",
-	}
-
-	t2 := Todo{
-		ID:    "1111",
-		Title: "code",
-	}
-
-	t3 := Todo{
-		ID:    "99999",
-		Title: "what ever",
-	}
-	r.db.CreateTodo(&t1)
-	r.db.CreateTodo(&t2)
-	r.db.CreateTodo(&t3)
+	// t1 := Todo{
+	// 	ID:    uuid.New().String(),
+	// 	Title: "walk the dog",
+	// }
+	//
+	// t2 := Todo{
+	// 	ID:    uuid.New().String(),
+	// 	Title: "code",
+	// }
+	//
+	// t3 := Todo{
+	// 	ID:    uuid.New().String(),
+	// 	Title: "what ever",
+	// }
+	// r.db.CreateTodo(&t1)
+	// r.db.CreateTodo(&t2)
+	// r.db.CreateTodo(&t3)
 
 	todos := r.db.FindAllTodos()
 	toRemove := r.viewBuilder.NewTodoListView(todos, 16)
