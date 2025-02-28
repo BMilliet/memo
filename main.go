@@ -1,11 +1,14 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 	"os"
 
 	"memo/src"
+
+	"github.com/pressly/goose/v3"
 )
 
 func main() {
@@ -22,6 +25,8 @@ func main() {
 		log.Fatalln(err, "Failed to initialize FileManager")
 	}
 
+	setupDB(fileManager.MemoDB)
+
 	utils := src.NewUtils()
 	viewBuilder := src.NewViewBuilder()
 
@@ -32,4 +37,28 @@ func main() {
 	)
 
 	runner.Start()
+}
+
+func setupDB(path string) {
+	db, err := sql.Open("sqlite3", path)
+	if err != nil {
+		log.Fatal("Failed to open database:", err)
+	}
+	defer db.Close()
+
+	if err := runMigrations(db); err != nil {
+		log.Fatal("Migration failed:", err)
+	}
+
+	fmt.Println("✅ Database migrations applied successfully!")
+}
+
+func runMigrations(db *sql.DB) error {
+	goose.SetDialect("sqlite3")
+
+	migrationsDir := "db/migrations"
+	if err := goose.Up(db, migrationsDir); err != nil {
+		return err
+	}
+	return nil
 }
