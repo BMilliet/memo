@@ -25,6 +25,16 @@ func main() {
 		log.Fatalln(err, "Failed to initialize FileManager")
 	}
 
+	// Init and setup
+	// Create instance of FileManager and setup.
+	// FileManager should create the following:
+	//
+	// ~/.memo
+	setupErr := fileManager.BasicSetup()
+	if setupErr != nil {
+		log.Fatalln(setupErr, "Failed to setup basic memo dotfiles")
+	}
+
 	setupDB(fileManager.MemoDB)
 
 	utils := src.NewUtils()

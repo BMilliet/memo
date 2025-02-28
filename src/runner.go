@@ -20,6 +20,4 @@ func (r *Runner) Start() {
 	// FileManager should create the following:
 	//
 	// ~/.memo
-
-	r.fileManager.BasicSetup()
 }
