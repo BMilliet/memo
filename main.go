@@ -39,11 +39,13 @@ func main() {
 
 	utils := src.NewUtils()
 	viewBuilder := src.NewViewBuilder()
+	db := src.NewDbManager()
 
 	runner := src.NewRunner(
 		fileManager,
 		utils,
 		viewBuilder,
+		db,
 	)
 
 	runner.Start()
