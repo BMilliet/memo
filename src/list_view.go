@@ -10,7 +10,7 @@ import (
 )
 
 type ListItem struct {
-	T, D string
+	T, D, OP, ID, Content string
 }
 
 func (i ListItem) Title() string       { return i.T }
@@ -42,6 +42,24 @@ func (m ListViewModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.quitting = true
 			i, ok := m.list.SelectedItem().(ListItem)
 			if ok {
+				*m.endValue = i
+			}
+			return m, tea.Quit
+
+		case "a":
+			m.quitting = true
+			i, ok := m.list.SelectedItem().(ListItem)
+			if ok {
+				i.OP = "add"
+				*m.endValue = i
+			}
+			return m, tea.Quit
+
+		case "d":
+			m.quitting = true
+			i, ok := m.list.SelectedItem().(ListItem)
+			if ok {
+				i.OP = "del"
 				*m.endValue = i
 			}
 			return m, tea.Quit
