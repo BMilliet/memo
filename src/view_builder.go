@@ -4,6 +4,7 @@ type ViewBuilderInterface interface {
 	NewTodoListView(op []*Todo, height int) []string
 	NewListView(title string, op []ListItem, height int) ListItem
 	NewTextFieldView(title, placeHolder string) string
+	NewTextAreaFieldView(title, placeHolder string) string
 }
 
 type ViewBuilder struct{}
@@ -27,5 +28,11 @@ func (b *ViewBuilder) NewTodoListView(op []*Todo, height int) []string {
 func (b *ViewBuilder) NewTextFieldView(title, placeHolder string) string {
 	endValue := ""
 	TextFieldView(title, placeHolder, &endValue)
+	return endValue
+}
+
+func (b *ViewBuilder) NewTextAreaFieldView(title, placeHolder string) string {
+	endValue := ""
+	TextAreaFieldView(title, placeHolder, &endValue)
 	return endValue
 }

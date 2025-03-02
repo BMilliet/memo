@@ -117,7 +117,7 @@ func (r *Runner) addSnippetList() {
 
 func (r *Runner) addSnippetToList(id string) {
 	name := r.viewBuilder.NewTextFieldView("Write the name for this snippet", "")
-	content := r.viewBuilder.NewTextFieldView("Write the snippet", "")
+	content := r.viewBuilder.NewTextAreaFieldView("Write the snippet", "")
 
 	snippet := Snippet{
 		ID:             uuid.NewString(),
