@@ -62,6 +62,6 @@ func DefaultStyles() *Styles {
 }
 
 func (s Styles) Text(t string, c lipgloss.Color) string {
-	var style = lipgloss.NewStyle().Foreground(c)
+	style := lipgloss.NewStyle().Foreground(c)
 	return style.Render(t)
 }

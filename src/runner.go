@@ -49,7 +49,7 @@ func (r *Runner) Start() {
 }
 
 func (r *Runner) todoListSection() {
-	// TODO: need to improve
+	// TODO: need to improve.
 	todos := r.db.FindAllTodos()
 	toRemove := r.viewBuilder.NewTodoListView(todos, 16)
 	fmt.Println(toRemove)
