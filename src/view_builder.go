@@ -3,8 +3,8 @@ package src
 type ViewBuilderInterface interface {
 	NewTodoListView(op []*Todo, height int) []string
 	NewListView(title string, op []ListItem, height int) ListItem
-	NewTextFieldView(title, placeHolder string) string
-	NewTextAreaFieldView(title, placeHolder string) string
+	NewTextFieldView(title, placeHolder string) TextReturnObject
+	NewTextAreaFieldView(title, placeHolder string) TextReturnObject
 }
 
 type ViewBuilder struct{}
@@ -25,14 +25,14 @@ func (b *ViewBuilder) NewTodoListView(op []*Todo, height int) []string {
 	return endValue
 }
 
-func (b *ViewBuilder) NewTextFieldView(title, placeHolder string) string {
-	endValue := ""
+func (b *ViewBuilder) NewTextFieldView(title, placeHolder string) TextReturnObject {
+	endValue := TextReturnObject{}
 	TextFieldView(title, placeHolder, &endValue)
 	return endValue
 }
 
-func (b *ViewBuilder) NewTextAreaFieldView(title, placeHolder string) string {
-	endValue := ""
+func (b *ViewBuilder) NewTextAreaFieldView(title, placeHolder string) TextReturnObject {
+	endValue := TextReturnObject{}
 	TextAreaFieldView(title, placeHolder, &endValue)
 	return endValue
 }

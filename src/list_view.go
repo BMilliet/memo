@@ -50,7 +50,7 @@ func (m ListViewModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.quitting = true
 			i, ok := m.list.SelectedItem().(ListItem)
 			if ok {
-				i.OP = "add"
+				i.OP = AddSignal
 				*m.endValue = i
 			}
 			return m, tea.Quit
@@ -59,13 +59,16 @@ func (m ListViewModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.quitting = true
 			i, ok := m.list.SelectedItem().(ListItem)
 			if ok {
-				i.OP = "del"
+				i.OP = RemoveSignal
 				*m.endValue = i
 			}
 			return m, tea.Quit
 
 		case "ctrl+c", "esc", "q":
-			*m.endValue = ListItem{T: ExitSignal}
+			*m.endValue = ListItem{
+				OP: ExitSignal,
+				T:  ExitSignal,
+			}
 			return m, tea.Quit
 		}
 	}
@@ -82,7 +85,8 @@ func (m ListViewModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m ListViewModel) View() string {
 	if m.quitting {
-		return ""
+		message := "See ya 👋 💾"
+		return message
 	}
 
 	return m.list.View()

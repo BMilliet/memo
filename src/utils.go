@@ -1,9 +1,9 @@
 package src
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
+	"os/exec"
 )
 
 type UtilsInterface interface {
@@ -12,6 +12,7 @@ type UtilsInterface interface {
 	ExitWithError(message string)
 	CreateSnippetLists(snippets []*SnippetsList) []ListItem
 	ConvertSnippetItems(snippets []*Snippet) []ListItem
+	CopyToClipboard(text string) error
 }
 
 type Utils struct{}
@@ -77,11 +78,30 @@ func (u *Utils) truncate(s string, max int) string {
 	return s
 }
 
-func ParseJSONContent[T any](jsonString string) (*T, error) {
-	var targetStruct T
-	err := json.Unmarshal([]byte(jsonString), &targetStruct)
+func (u *Utils) CopyToClipboard(text string) error {
+	cmd := exec.Command("pbcopy")
+
+	in, err := cmd.StdinPipe()
 	if err != nil {
-		return nil, fmt.Errorf("ParseJSONContent -> %v", err)
+		return fmt.Errorf("failed to get stdin pipe: %v", err)
 	}
-	return &targetStruct, nil
+
+	if err := cmd.Start(); err != nil {
+		return fmt.Errorf("failed to start pbcopy: %v", err)
+	}
+
+	_, err = in.Write([]byte(text))
+	if err != nil {
+		return fmt.Errorf("failed to write to pbcopy: %v", err)
+	}
+
+	if err := in.Close(); err != nil {
+		return fmt.Errorf("failed to close stdin pipe: %v", err)
+	}
+
+	if err := cmd.Wait(); err != nil {
+		return fmt.Errorf("failed to wait for pbcopy: %v", err)
+	}
+
+	return nil
 }

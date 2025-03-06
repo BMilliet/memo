@@ -13,17 +13,21 @@ type (
 	errMsg error
 )
 
+type TextReturnObject struct {
+	OP, Content string
+}
+
 type textInputViewModel struct {
 	textInput textinput.Model
 	err       error
 	question  string
-	endValue  *string
+	endValue  *TextReturnObject
 	quitting  bool
 	styles    *Styles
 	errors    bool
 }
 
-func TextFieldViewModel(question, placeHolder string, value *string) textInputViewModel {
+func TextFieldViewModel(question, placeHolder string, textReturnObj *TextReturnObject) textInputViewModel {
 	ti := textinput.New()
 	ti.Placeholder = placeHolder
 	ti.Focus()
@@ -34,7 +38,7 @@ func TextFieldViewModel(question, placeHolder string, value *string) textInputVi
 		textInput: ti,
 		err:       nil,
 		question:  question,
-		endValue:  value,
+		endValue:  textReturnObj,
 		styles:    DefaultStyles(),
 		quitting:  false,
 	}
@@ -58,12 +62,12 @@ func (m textInputViewModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, cmd
 			}
 
-			*m.endValue = v
+			*m.endValue = TextReturnObject{OP: AddSignal, Content: v}
 			m.quitting = true
 			return m, tea.Quit
 
 		case tea.KeyCtrlC, tea.KeyEsc:
-			*m.endValue = ExitSignal
+			*m.endValue = TextReturnObject{OP: ExitSignal, Content: ""}
 			return m, tea.Quit
 		}
 
@@ -78,7 +82,8 @@ func (m textInputViewModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m textInputViewModel) View() string {
 	if m.quitting {
-		return ""
+		message := "See ya 👋 💾"
+		return message
 	}
 
 	inputField := m.styles.InputField.Render(m.textInput.View())
@@ -94,7 +99,7 @@ func (m textInputViewModel) View() string {
 	)
 }
 
-func TextFieldView(title, placeHolder string, endValue *string) {
+func TextFieldView(title, placeHolder string, endValue *TextReturnObject) {
 	m := TextFieldViewModel(title, placeHolder, endValue)
 
 	if _, err := tea.NewProgram(m).Run(); err != nil {

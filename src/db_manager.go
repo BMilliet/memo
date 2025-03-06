@@ -3,7 +3,6 @@ package src
 import (
 	"context"
 	"database/sql"
-	"fmt"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -48,8 +47,6 @@ func NewDbManager(utils UtilsInterface, dbPath string) *DBManager {
 }
 
 func (dbm *DBManager) Setup() {
-	fmt.Println("🔌 Connecting to db...")
-
 	db, err := sql.Open("sqlite3", dbm.dbPath)
 	if err != nil {
 		dbm.utils.HandleError(err, "failed to open database")
@@ -57,7 +54,6 @@ func (dbm *DBManager) Setup() {
 
 	dbm.db = db
 	dbm.queries = New(db)
-	fmt.Println("✅ Database setup complete.")
 }
 
 // To-Do CRUD

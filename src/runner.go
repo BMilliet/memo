@@ -2,6 +2,7 @@ package src
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/google/uuid"
 )
@@ -37,7 +38,7 @@ func (r *Runner) Start() {
 		},
 	}
 
-	answer := r.viewBuilder.NewListView("Select one menu option.", choices, 16)
+	answer := r.viewBuilder.NewListView("Select one menu option.", choices, 14)
 	r.utils.ValidateInput(answer.T)
 
 	switch answer.T {
@@ -46,13 +47,7 @@ func (r *Runner) Start() {
 	case temp:
 		r.tempListSection()
 	}
-}
-
-func (r *Runner) todoListSection() {
-	// TODO: need to improve.
-	todos := r.db.FindAllTodos()
-	toRemove := r.viewBuilder.NewTodoListView(todos, 16)
-	fmt.Println(toRemove)
+	r.exit()
 }
 
 func (r *Runner) snippetsListSection() {
@@ -64,16 +59,17 @@ func (r *Runner) snippetsListSection() {
 	snippetsLists = r.db.FindAllSnippetsLists()
 	choices := r.utils.CreateSnippetLists(snippetsLists)
 
-	section := r.viewBuilder.NewListView("Select a snippet section.", choices, 16)
+	section := r.viewBuilder.NewListView("Select a snippet section.", choices, 24)
 
 	switch section.OP {
-	case "add":
-		fmt.Println(section.OP)
+	case AddSignal:
 		r.addSnippetList()
 		return
-	case "del":
+	case RemoveSignal:
 		r.db.DeleteSnippetsList(section.ID)
-		fmt.Println(section.OP)
+		return
+	case ExitSignal:
+		r.exit()
 		return
 	}
 
@@ -83,33 +79,36 @@ func (r *Runner) snippetsListSection() {
 func (r *Runner) snippetsSection(id string) {
 	snippetItems := r.db.FindSnippetsByList(id)
 	if len(snippetItems) == 0 {
-		fmt.Println("add to empty section")
 		r.addSnippetToList(id)
 	}
 	snippetItems = r.db.FindSnippetsByList(id)
 	snippets := r.utils.ConvertSnippetItems(snippetItems)
-	section := r.viewBuilder.NewListView("Select an snippet.", snippets, 16)
+	section := r.viewBuilder.NewListView("Select an snippet.", snippets, 24)
 
 	switch section.OP {
-	case "add":
-		fmt.Println(section.OP)
+	case AddSignal:
 		r.addSnippetToList(id)
 		return
-	case "del":
+	case RemoveSignal:
 		r.db.DeleteSnippet(section.ID)
-		fmt.Println(section.OP)
 		return
+	case ExitSignal:
+		r.exit()
 	}
 
-	fmt.Println(section.Content)
+	r.copyToClipBoard(section.Content)
+	r.exit()
 }
 
 func (r *Runner) addSnippetList() {
 	section := r.viewBuilder.NewTextFieldView("Write the section name for this snippet", "")
+	if section.OP == ExitSignal {
+		r.exit()
+	}
 
 	snippetList := SnippetsList{
 		ID:   uuid.New().String(),
-		Name: section,
+		Name: section.Content,
 	}
 
 	r.db.CreateSnippetsList(&snippetList)
@@ -117,16 +116,33 @@ func (r *Runner) addSnippetList() {
 
 func (r *Runner) addSnippetToList(id string) {
 	name := r.viewBuilder.NewTextFieldView("Write the name for this snippet", "")
+	if name.OP == ExitSignal {
+		r.exit()
+	}
+
 	content := r.viewBuilder.NewTextAreaFieldView("Write the snippet", "")
+	if content.OP == ExitSignal {
+		r.exit()
+	}
 
 	snippet := Snippet{
 		ID:             uuid.NewString(),
 		SnippetsListID: id,
-		Title:          name,
-		Content:        content,
+		Title:          name.Content,
+		Content:        content.Content,
 	}
 
 	r.db.CreateSnippet(&snippet)
+}
+
+func (r *Runner) exit() {
+	fmt.Println("💾 See ya 👋")
+	os.Exit(0)
+}
+
+func (r *Runner) copyToClipBoard(text string) {
+	r.utils.CopyToClipboard(text)
+	fmt.Println("✅ Content copied to clipboard")
 }
 
 func (r *Runner) tempListSection() {
