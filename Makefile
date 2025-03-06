@@ -10,3 +10,6 @@ build:
 
 test:
 	@go test -v
+
+querie:
+	@sqlc generate
