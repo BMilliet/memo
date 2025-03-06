@@ -31,7 +31,7 @@ func TextFieldViewModel(question, placeHolder string, textReturnObj *TextReturnO
 	ti := textinput.New()
 	ti.Placeholder = placeHolder
 	ti.Focus()
-	ti.CharLimit = 156
+	ti.CharLimit = 255
 	ti.Placeholder = placeHolder
 
 	return textInputViewModel{

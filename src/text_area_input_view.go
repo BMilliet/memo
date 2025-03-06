@@ -24,7 +24,7 @@ func TextAreaFieldViewModel(question, placeHolder string, value *TextReturnObjec
 	ti := textarea.New()
 	ti.Placeholder = placeHolder
 	ti.Focus()
-	ti.CharLimit = 156
+	ti.CharLimit = 255
 	ti.Placeholder = placeHolder
 
 	return textAreaInputViewModel{
