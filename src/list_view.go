@@ -89,7 +89,11 @@ func (m ListViewModel) View() string {
 		return message
 	}
 
-	return m.list.View()
+	return lipgloss.JoinVertical(
+		lipgloss.Left,
+		m.list.View(),
+		m.styles.HelpStyle.Render("↑/↓: Navigate • Enter: Select • a: Add • d: Delete • q: Quit"),
+	)
 }
 
 func ListView(title string, op []ListItem, height int, endValue *ListItem) {
@@ -116,6 +120,7 @@ func ListView(title string, op []ListItem, height int, endValue *ListItem) {
 	l.Styles.Title.Align(lipgloss.Left)
 	l.Styles.PaginationStyle = styles.PaginationStyle
 	l.Styles.HelpStyle = styles.HelpStyle
+	l.SetShowHelp(false)
 
 	m := ListViewModel{list: l, endValue: endValue, selected: "", styles: *styles}
 
