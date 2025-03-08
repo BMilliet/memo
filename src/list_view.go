@@ -23,6 +23,7 @@ type ListViewModel struct {
 	endValue *ListItem
 	quitting bool
 	styles   Styles
+	footer   string
 }
 
 func (m ListViewModel) Init() tea.Cmd {
@@ -92,14 +93,19 @@ func (m ListViewModel) View() string {
 	return lipgloss.JoinVertical(
 		lipgloss.Left,
 		m.list.View(),
-		m.styles.HelpStyle.Render("↑/↓: Navigate • Enter: Select • a: Add • d: Delete • q: Quit"),
+		m.styles.HelpStyle.Render(m.footer),
 	)
 }
 
-func ListView(title string, op []ListItem, height int, endValue *ListItem) {
+func ListView(title string, op []ListItem, height int, endValue *ListItem, crud bool) {
 	items := []list.Item{}
 	for _, o := range op {
 		items = append(items, o)
+	}
+
+	footer := "↑/↓: Navigate • Enter: Select • q: Quit"
+	if crud {
+		footer = "↑/↓: Navigate • Enter: Select • a: Add • d: Delete • q: Quit"
 	}
 
 	styles := DefaultStyles()
@@ -122,7 +128,7 @@ func ListView(title string, op []ListItem, height int, endValue *ListItem) {
 	l.Styles.HelpStyle = styles.HelpStyle
 	l.SetShowHelp(false)
 
-	m := ListViewModel{list: l, endValue: endValue, selected: "", styles: *styles}
+	m := ListViewModel{list: l, endValue: endValue, selected: "", styles: *styles, footer: footer}
 
 	if _, err := tea.NewProgram(m).Run(); err != nil {
 		fmt.Println("ListView -> ", err)

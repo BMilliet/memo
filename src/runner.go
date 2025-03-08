@@ -38,7 +38,7 @@ func (r *Runner) Start() {
 		},
 	}
 
-	answer := r.viewBuilder.NewListView("Select one menu option.", choices, 14)
+	answer := r.viewBuilder.NewListView("Select one menu option.", choices, 14, false)
 	r.utils.ValidateInput(answer.T)
 
 	switch answer.T {
@@ -59,7 +59,7 @@ func (r *Runner) snippetsListSection() {
 	snippetsLists = r.db.FindAllSnippetsLists()
 	choices := r.utils.CreateSnippetLists(snippetsLists)
 
-	section := r.viewBuilder.NewListView("Select a snippet section.", choices, 24)
+	section := r.viewBuilder.NewListView("Select a snippet section.", choices, 24, true)
 
 	switch section.OP {
 	case AddSignal:
@@ -83,7 +83,7 @@ func (r *Runner) snippetsSection(id string) {
 	}
 	snippetItems = r.db.FindSnippetsByList(id)
 	snippets := r.utils.ConvertSnippetItems(snippetItems)
-	section := r.viewBuilder.NewListView("Select an snippet.", snippets, 24)
+	section := r.viewBuilder.NewListView("Select an snippet.", snippets, 24, true)
 
 	switch section.OP {
 	case AddSignal:
@@ -142,7 +142,7 @@ func (r *Runner) exit() {
 
 func (r *Runner) copyToClipBoard(text string) {
 	r.utils.CopyToClipboard(text)
-	fmt.Println("✅ Content copied to clipboard")
+	fmt.Println("\033[32m✅ Content copied to clipboard\033[0m")
 }
 
 func (r *Runner) tempListSection() {
