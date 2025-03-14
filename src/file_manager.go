@@ -11,9 +11,10 @@ type FileManagerInterface interface {
 }
 
 type FileManager struct {
-	homeDir string
-	memoDir string
-	DBPath  string
+	homeDir        string
+	memoDir        string
+	DBPath         string
+	MigrationsPath string
 }
 
 func NewFileManager() (*FileManager, error) {
@@ -24,11 +25,13 @@ func NewFileManager() (*FileManager, error) {
 
 	memoDir := filepath.Join(homeDir, MemoDirName)
 	memoDB := filepath.Join(memoDir, MemoDB)
+	migrationsPath := filepath.Join(memoDir, MigrationsPath)
 
 	return &FileManager{
-		homeDir: homeDir,
-		memoDir: memoDir,
-		DBPath:  memoDB,
+		homeDir:        homeDir,
+		memoDir:        memoDir,
+		DBPath:         memoDB,
+		MigrationsPath: migrationsPath,
 	}, nil
 }
 

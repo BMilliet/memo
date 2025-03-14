@@ -1,11 +1,11 @@
 
-run:
+run: move_migrations
 	@go run .
 
 deps:
 	@go mod tidy
 
-build:
+build: move_migrations
 	@go build -o memo
 
 test:
@@ -13,3 +13,6 @@ test:
 
 querie:
 	@sqlc generate
+
+move_migrations:
+	@cp -r db/migrations ~/.memo/migrations
