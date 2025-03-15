@@ -1,7 +1,6 @@
 package src
 
 type ViewBuilderInterface interface {
-	NewTodoListView(op []*Todo, height int) []string
 	NewListView(title string, op []ListItem, height int, crud bool) ListItem
 	NewTextFieldView(title, placeHolder string) TextReturnObject
 	NewTextAreaFieldView(title, placeHolder string) TextReturnObject
@@ -16,12 +15,6 @@ func NewViewBuilder() *ViewBuilder {
 func (b *ViewBuilder) NewListView(title string, op []ListItem, height int, crud bool) ListItem {
 	endValue := ListItem{}
 	ListView(title, op, height, &endValue, crud)
-	return endValue
-}
-
-func (b *ViewBuilder) NewTodoListView(op []*Todo, height int) []string {
-	endValue := []string{}
-	TodoListView(op, height, &endValue)
 	return endValue
 }
 

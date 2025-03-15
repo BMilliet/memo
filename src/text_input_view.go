@@ -67,6 +67,7 @@ func (m textInputViewModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 
 		case tea.KeyCtrlC, tea.KeyEsc:
+			m.quitting = true
 			*m.endValue = TextReturnObject{OP: ExitSignal, Content: ""}
 			return m, tea.Quit
 		}
@@ -82,8 +83,7 @@ func (m textInputViewModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m textInputViewModel) View() string {
 	if m.quitting {
-		message := "See ya 👋 💾"
-		return message
+		return ""
 	}
 
 	inputField := m.styles.InputField.Render(m.textInput.View())

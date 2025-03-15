@@ -66,6 +66,7 @@ func (m ListViewModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 
 		case "ctrl+c", "esc", "q":
+			m.quitting = true
 			*m.endValue = ListItem{
 				OP: ExitSignal,
 				T:  ExitSignal,
@@ -86,8 +87,7 @@ func (m ListViewModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m ListViewModel) View() string {
 	if m.quitting {
-		message := "See ya 👋 💾"
-		return message
+		return ""
 	}
 
 	return lipgloss.JoinVertical(
