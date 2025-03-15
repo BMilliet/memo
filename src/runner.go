@@ -47,6 +47,7 @@ func (r *Runner) Start() {
 	case temp:
 		r.tempListSection()
 	}
+
 	r.exit()
 }
 
@@ -70,7 +71,6 @@ func (r *Runner) snippetsListSection() {
 		return
 	case ExitSignal:
 		r.exit()
-		return
 	}
 
 	r.snippetsSection(section.ID)

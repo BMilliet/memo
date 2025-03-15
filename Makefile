@@ -15,4 +15,5 @@ querie:
 	@sqlc generate
 
 move_migrations:
-	@cp -r db/migrations ~/.memo/migrations
+	@rm -r ~/.memo/migrations
+	@cp -r db/migrations ~/.memo/
